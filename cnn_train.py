@@ -113,12 +113,12 @@ class CNN_train():
         self.dataset_name = dataset_name
 
         # load dataset
-        if dataset_name == 'cifar10' or dataset_name == 'mnist':
-            if dataset_name == 'cifar10':
+        if dataset_name == 'cifar10' or dataset_name == 'mnist' or dataset_name == 'coronahack':
+            if dataset_name == 'coronahack':
                 self.n_class = 10
                 self.channel = 3
                 if self.validation:
-                    self.dataloader, self.test_dataloader = get_train_valid_loader(data_dir='./', batch_size=self.batchsize, augment=True, random_seed=2018, num_workers=1, pin_memory=True)
+                    self.dataloader, self.test_dataloader = get_train_valid_loader(data_dir='./data/', batch_size=self.batchsize, augment=True, random_seed=2018, num_workers=1, pin_memory=True)
                     # self.dataloader, self.test_dataloader = loaders[0], loaders[1]
                 else:
                     train_dataset = dset.CIFAR10(root='./', train=True, download=True,

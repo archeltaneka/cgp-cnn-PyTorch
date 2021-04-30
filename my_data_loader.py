@@ -5,6 +5,7 @@
 
 import torch
 import numpy as np
+from prepare_dataset import prepare
 
 from utils import plot_images
 from torchvision import datasets
@@ -19,7 +20,7 @@ def get_train_valid_loader(data_dir,
                            valid_size=0.1,
                            shuffle=True,
                            show_sample=False,
-                           num_workers=4,
+                           num_workers=0,
                            pin_memory=False):
     """
     Utility function for loading and returning train and valid
@@ -75,34 +76,35 @@ def get_train_valid_loader(data_dir,
         ])
 
     # load the dataset
-    train_dataset = datasets.CIFAR10(
-        root=data_dir, train=True,
-        download=True, transform=train_transform,
-    )
+    train_dataset, valid_dataset = prepare(data_dir)
+#     train_dataset = datasets.CIFAR10(
+#         root=data_dir, train=True,
+#         download=True, transform=train_transform,
+#     )
 
-    valid_dataset = datasets.CIFAR10(
-        root=data_dir, train=True,
-        download=True, transform=valid_transform,
-    )
+#     valid_dataset = datasets.CIFAR10(
+#         root=data_dir, train=True,
+#         download=True, transform=valid_transform,
+#     )
 
-    num_train = len(train_dataset)
-    indices = list(range(num_train))
-    split = int(np.floor(valid_size * num_train))
+#     num_train = len(train_dataset)
+#     indices = list(range(num_train))
+#     split = int(np.floor(valid_size * num_train))
 
-    if shuffle:
-        np.random.seed(random_seed)
-        np.random.shuffle(indices)
+#     if shuffle:
+#         np.random.seed(random_seed)
+#         np.random.shuffle(indices)
 
-    train_idx, valid_idx = indices[split:], indices[:split]
-    train_sampler = SubsetRandomSampler(train_idx)
-    valid_sampler = SubsetRandomSampler(valid_idx)
+#     train_idx, valid_idx = indices[split:], indices[:split]
+#     train_sampler = SubsetRandomSampler(train_idx)
+#     valid_sampler = SubsetRandomSampler(valid_idx)
 
     train_loader = torch.utils.data.DataLoader(
-        train_dataset, batch_size=batch_size, sampler=train_sampler,
+        train_dataset, batch_size=batch_size, shuffle=True,
         num_workers=num_workers, pin_memory=pin_memory,
     )
     valid_loader = torch.utils.data.DataLoader(
-        valid_dataset, batch_size=batch_size, sampler=valid_sampler,
+        valid_dataset, batch_size=batch_size, shuffle=True,
         num_workers=num_workers, pin_memory=pin_memory,
     )
 
