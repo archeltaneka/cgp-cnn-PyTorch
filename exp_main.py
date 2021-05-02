@@ -28,8 +28,8 @@ if __name__ == '__main__':
         with open(args.net_info_file, mode='wb') as f:
             pickle.dump(network_info, f)
         # Evaluation function for CGP (training CNN and return validation accuracy)
-        imgSize = 32
-        eval_f = CNNEvaluation(gpu_num=args.gpu_num, dataset='coronahack', verbose=True, epoch_num=1, batchsize=32, imgSize=imgSize)
+        imgSize = 128
+        eval_f = CNNEvaluation(gpu_num=args.gpu_num, dataset='coronahack', verbose=True, epoch_num=1, batchsize=16, imgSize=imgSize)
 
         # Execute evolution
         cgp = CGP(network_info, eval_f, lam=args.lam, imgSize=imgSize, init=args.init)

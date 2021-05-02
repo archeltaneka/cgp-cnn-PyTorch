@@ -115,7 +115,7 @@ class CNN_train():
         # load dataset
         if dataset_name == 'cifar10' or dataset_name == 'mnist' or dataset_name == 'coronahack':
             if dataset_name == 'coronahack':
-                self.n_class = 10
+                self.n_class = 2
                 self.channel = 3
                 if self.validation:
                     self.dataloader, self.test_dataloader = get_train_valid_loader(data_dir='./data/', batch_size=self.batchsize, augment=True, random_seed=2018, num_workers=1, pin_memory=True)
@@ -137,12 +137,14 @@ class CNN_train():
                     self.dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=self.batchsize, shuffle=True, num_workers=int(2))
                     self.test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=self.batchsize, shuffle=True, num_workers=int(2))
             print('train num    ', len(self.dataloader.dataset))
-            # print('test num     ', len(self.test_dataloader.dataset))
+            print('test num     ', len(self.test_dataloader.dataset))
         else:
             print('\tInvalid input dataset name at CNN_train()')
             exit(1)
 
     def __call__(self, cgp, gpuID, epoch_num=200, out_model='mymodel.model'):
+        # empty cuda cache
+        torch.cuda.empty_cache()
         if self.verbose:
             print('GPUID     :', gpuID)
             print('epoch_num :', epoch_num)
